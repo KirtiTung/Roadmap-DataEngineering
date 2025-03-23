@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Roadmap Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #f7f7f7;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            width: 100%;
+            max-width: 700px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: 70vh;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .task {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        .task input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        .progress {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .clear-btn {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+        .clear-btn:hover {
+            background-color: #e60000;
+        }
+
+            .bar-per {
+    background-color: green;
+    height: 10px;
+    width: 10%;  /* Initial width is 0% */
+    transition: width 0.3s ease;  /* Smooth transition for width changes */
+
+
+        }
+    </style>
+</head>
+<body>
+    
+
+<div class="main-body">
+    <div class="bar-per"></div>
+    <div class="container">
+        <h2>Learning Roadmap Tracker</h2>
+        <div id="task-list"></div>
+        <div class="progress">
+            <h3>Progress: <span id="progress-percentage">0%</span></h3>
+        </div>
+        <button class="clear-btn" onclick="clearAllTasks()">Clear All Tasks</button>
+    </div>
+
+    <script>
+        // Get today's date
+        const today = new Date();
+
+        // Function to format the date as YYYY-MM-DD
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero if needed
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Initial Tasks with dynamic date calculation
+        const initialTasks = [
+    { text: 'Learn basic Python syntax: variables, loops, and functions.', duration: [2, 0], completed: false },  // Day 1-2
+    { text: 'Understand Python classes and objects.', duration: [2, 0], completed: false },  // Day 3-4
+    { text: 'Work with data structures: lists, dictionaries, and sets.', duration: [2, 0], completed: false },  // Day 5-6
+    { text: 'Practice Python problems on platforms like LeetCode or HackerRank.', duration: [1, 0], completed: false },  // Day 7
+    { text: 'Learn libraries: pandas, numpy, matplotlib basics.', duration: [3, 0], completed: false },  // Day 8-10
+    { text: 'Work on small Python projects using these libraries (e.g., data cleaning, simple data analysis).', duration: [2, 0], completed: false },  // Day 11-12
+    { text: 'Review and practice problems to reinforce understanding.', duration: [2, 0], completed: false },  // Day 13-14
+
+    // Week 3-4: Master SQL
+    { text: 'Basic SQL queries (SELECT, INSERT, UPDATE, DELETE).', duration: [2, 0], completed: false },  // Day 15-16
+    { text: 'Master different types of JOINs (INNER, LEFT, RIGHT, FULL).', duration: [2, 0], completed: false },  // Day 17-18
+    { text: 'Work on Grouping and Aggregating (GROUP BY, COUNT, SUM, AVG).', duration: [2, 0], completed: false },  // Day 19-20
+    { text: 'Practice SQL on platforms like SQLZoo or LeetCode.', duration: [1, 0], completed: false },  // Day 21
+    { text: 'Learn advanced SQL (window functions, subqueries, and normalization).', duration: [2, 0], completed: false },  // Day 22-23
+    { text: 'Work on optimizing queries using indexes.', duration: [2, 0], completed: false },  // Day 24-25
+    { text: 'Final practice and mini-project (e.g., creating a database schema for a mock application).', duration: [3, 0], completed: false },  // Day 26-28
+
+    // Week 5-6: Understand Databases and Data Modeling
+    { text: 'Learn about relational databases and ER diagrams.', duration: [2, 0], completed: false },  // Day 29-30
+    { text: 'Study normalization and denormalization processes.', duration: [2, 0], completed: false },  // Day 31-32
+    { text: 'Learn about indexing and performance optimization.', duration: [2, 0], completed: false },  // Day 33-34
+    { text: 'Review database design principles (e.g., primary/foreign keys).', duration: [2, 0], completed: false },  // Day 35-36
+    { text: 'Work on small database design projects and practice applying ER diagrams.', duration: [4, 0], completed: false },  // Day 37-40
+
+    // Phase 2: Big Data and Distributed Systems (3-5 Months)
+    { text: 'Study Hadoop architecture (HDFS, MapReduce).', duration: [2, 0], completed: false },  // Day 41-42
+    { text: 'Learn about Apache Spark and its architecture.', duration: [2, 0], completed: false },  // Day 43-44
+    { text: 'Practice basic operations in Spark using PySpark.', duration: [2, 0], completed: false },  // Day 45-46
+    { text: 'Learn Apache Kafka basics and stream processing.', duration: [2, 0], completed: false },  // Day 47-48
+    { text: 'Work on a small project involving Spark or Kafka (e.g., simple data analysis or stream processing).', duration: [2, 0], completed: false },  // Day 49-50
+
+    // Week 9-10: Data Warehousing and ETL
+    { text: 'Learn data warehousing concepts and OLAP vs. OLTP.', duration: [2, 0], completed: false },  // Day 51-52
+    { text: 'Study the ETL process (Extract, Transform, Load).', duration: [2, 0], completed: false },  // Day 53-54
+    { text: 'Learn about tools like Apache NiFi, Talend, and Airflow.', duration: [2, 0], completed: false },  // Day 55-56
+    { text: 'Work with a simple ETL tool or build a small data pipeline.', duration: [2, 0], completed: false },  // Day 57-58
+    { text: 'Practice creating a data pipeline using Apache Airflow.', duration: [2, 0], completed: false },  // Day 59-60
+
+    // Week 11-12: Cloud Computing and Storage
+    { text: 'Learn about cloud storage services (AWS S3, GCP Storage, Azure Blob Storage).', duration: [2, 0], completed: false },  // Day 61-62
+    { text: 'Study cloud computing platforms (AWS, GCP, Azure).', duration: [2, 0], completed: false },  // Day 63-64
+    { text: 'Learn Google BigQuery, AWS Redshift, or Azure Synapse Analytics.', duration: [2, 0], completed: false },  // Day 65-66
+    { text: 'Practice using cloud storage for small datasets.', duration: [2, 0], completed: false },  // Day 67-68
+    { text: 'Try deploying simple queries to cloud data warehouses.', duration: [2, 0], completed: false },  // Day 69-70
+
+    // Phase 3: Advanced Topics and Tools (6-9 Months)
+    { text: 'Learn Apache Airflow basics (DAGs, tasks, scheduling).', duration: [2, 0], completed: false },  // Day 71-72
+    { text: 'Understand Apache Airflow\'s execution model and task dependencies.', duration: [2, 0], completed: false },  // Day 73-74
+    { text: 'Work on small automation projects using Apache Airflow.', duration: [3, 0], completed: false },  // Day 75-77
+    { text: 'Learn about Luigi and Azkaban as alternatives to Airflow.', duration: [2, 0], completed: false },  // Day 78-79
+    { text: 'Compare different orchestration tools and pick one for further learning.', duration: [1, 0], completed: false },  // Day 80
+
+    // Week 15-16: Data Pipelines & Streaming
+    { text: 'Study stream processing (Apache Kafka, Apache Flink, AWS Kinesis).', duration: [2, 0], completed: false },  // Day 81-82
+    { text: 'Learn about building real-time data pipelines.', duration: [2, 0], completed: false },  // Day 83-84
+    { text: 'Implement a basic real-time streaming pipeline using Apache Kafka.', duration: [2, 0], completed: false },  // Day 85-86
+    { text: 'Integrate Kafka with other tools like Spark or Flink.', duration: [2, 0], completed: false },  // Day 87-88
+    { text: 'Work on a mini-project implementing a real-time data pipeline.', duration: [2, 0], completed: false },  // Day 89-90
+
+    // Week 17-18: Containerization & Virtualization
+    { text: 'Learn Docker basics and how to containerize applications.', duration: [2, 0], completed: false },  // Day 91-92
+    { text: 'Study Kubernetes and container orchestration.', duration: [2, 0], completed: false },  // Day 93-94
+    { text: 'Deploy a data pipeline using Docker and Kubernetes.', duration: [2, 0], completed: false },  // Day 95-96
+    { text: 'Learn how to scale data pipelines in a production environment using Kubernetes.', duration: [2, 0], completed: false },  // Day 97-98
+    { text: 'Practice deploying simple data workflows using Docker and Kubernetes.', duration: [2, 0], completed: false },  // Day 99-100
+
+    // Phase 4: Final Project and Job Preparation (9-12 Months)
+    { text: 'Design and implement a data pipeline (ingest, transform, load).', duration: [3, 0], completed: false },  // Day 101-103
+    { text: 'Clean and transform data, store it in a cloud data warehouse.', duration: [3, 0], completed: false },  // Day 104-106
+    { text: 'Automate the pipeline using Apache Airflow.', duration: [3, 0], completed: false },  // Day 107-109
+    { text: 'Create reports or dashboards (e.g., Power BI, Tableau).', duration: [3, 0], completed: false },  // Day 110-112
+    { text: 'Final testing and debugging.', duration: [2, 0], completed: false },  // Day 113-114
+
+    // Interview Preparation
+    { text: 'Review SQL optimization and common database questions.', duration: [2, 0], completed: false },  // Day 115-116
+    { text: 'Study big data tools (Hadoop, Spark, Kafka) and their use cases.', duration: [2, 0], completed: false },  // Day 117-118
+    { text: 'Practice ETL and data pipeline-related questions.', duration: [2, 0], completed: false },  // Day 119-120
+    { text: 'Work on cloud-related interview questions.', duration: [2, 0], completed: false },  // Day 121-122
+    { text: 'Review coding challenges and algorithms on LeetCode or HackerRank.', duration: [2, 0], completed: false }   // Day 123-124
+];
+
+        // Function to calculate the task dates
+        function calculateTaskDates(startDate, duration) {
+            let start = new Date(startDate);
+            let end = new Date(start);
+            end.setDate(end.getDate() + duration[0] - 1); // Add the number of days for the task duration
+            return [formatDate(start), formatDate(end)];
+        }
+
+        // Function to generate all tasks with dynamic dates
+        function generateTasksWithDates() {
+            let tasks = [];
+            let currentDate = today;
+
+            initialTasks.forEach(task => {
+                const [start, end] = calculateTaskDates(currentDate, task.duration);
+                task.text = `${task.text} (Start: ${start}, End: ${end})`;
+                tasks.push(task);
+
+                // Update current date to the next day's date after task's end date
+                currentDate = new Date(end);
+                currentDate.setDate(currentDate.getDate() + 1); // Move to the next day after the current task's end date
+            });
+
+            return tasks;
+        }
+
+        // Function to display tasks
+        function displayAllTasks() {
+            const taskList = document.getElementById('task-list');
+            taskList.innerHTML = ''; // Clear previous tasks
+
+            tasks.forEach((task, index) => {
+                const taskElement = document.createElement('div');
+                taskElement.classList.add('task');
+                taskElement.innerHTML = `
+                    <input type="checkbox" onclick="toggleComplete(${index})" ${task.completed ? 'checked' : ''} />
+                    <span class="${task.completed ? 'completed' : ''}">${task.text}</span>
+                `;
+                taskList.appendChild(taskElement);
+            });
+
+            // Update progress
+            updateProgress();
+        }
+
+        // Function to toggle task completion
+        function toggleComplete(index) {
+            tasks[index].completed = !tasks[index].completed;
+            localStorage.setItem('tasks', JSON.stringify(tasks)); // Save updated tasks to localStorage
+            displayAllTasks(); // Re-display tasks after toggle
+        }
+
+        // Function to calculate and display progress
+        function updateProgress() {
+            const totalTasks = tasks.length;
+            const completedTasks = tasks.filter(task => task.completed).length;
+            const percentage = Math.round((completedTasks / totalTasks) * 100);
+            document.getElementById('progress-percentage').innerText = `${percentage}%`;
+            const progressBar = document.querySelector('.bar-per');
+            progressBar.style.width = `${percentage}%`; 
+        }
+
+        // Function to clear all tasks from localStorage
+        function clearAllTasks() {
+            localStorage.removeItem('tasks'); // Remove tasks from localStorage
+            tasks.length = 0; // Clear the tasks array
+            displayAllTasks(); // Re-display tasks (empty list)
+        }
+
+        // Load tasks from localStorage or generate them if not present
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || generateTasksWithDates();
+        localStorage.setItem('tasks', JSON.stringify(tasks)); // Save tasks to localStorage
+        displayAllTasks(); // Display the tasks on page load
+
+        
+        
+    </script>
+
+</div>
+</body>
+</html>
